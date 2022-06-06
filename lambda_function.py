@@ -123,15 +123,19 @@ def recommend_portfolio(intent_request):
     investment_amount = get_slots(intent_request)["investmentAmount"]
     risk_level = get_slots(intent_request)["riskLevel"]
     source = intent_request["invocationSource"]
+    
+    
+    
 
+def validate_data(first_name, age, investment_amount, risk_level, source):
     if age is not None:
         if age >= 65 :
             return build_validation_result(
                 False,
+                "age",
                 "You are not the correct age to use this service, "
                 "please provide a different age.",
             )
-    # Validate the investment amount, it should be > 0
     if investment_amount is not None:
         if investment_amount > 5000:
             return build_validation_result(
@@ -140,7 +144,27 @@ def recommend_portfolio(intent_request):
                 "The amount invested should be greater than 5000, "
                 "please provide a correct amount.",
             )
+        
+        
+    return build_validation_result(True, True)
 
+
+def get_recommendation():
+    """
+    Returns an investment recommendation based on the level of risk chosen.
+    """
+    recommendation = ""
+    if risk_level = "none":
+        recommendation = "Invest in 100% bonds (AGG), 0% equities (SPY)" 
+    elif risk_level = "low":
+        recommendation = "Invest in 60% bonds (AGG), 40% equities (SPY)"
+    elif risk_level = "medium":
+        recommendation = "Invest in 40% bonds (AGG), 60% equities (SPY)"
+    elif risk_level = "high":
+        recommendation = "Invest in 20% bonds (AGG), 80% equities (SPY)"
+    else:
+        recommendation = "Please put another value in."
+    return recommendation
 ### Intents Dispatcher ###
 def dispatch(intent_request):
     """
@@ -164,3 +188,4 @@ def lambda_handler(event, context):
     """
 
     return dispatch(event)
+
